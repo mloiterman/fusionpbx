@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "Les queues sont utilisés pour configurer les salles d'attente (FIFO).";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "Le code sono usate per creare linee di attesa per i chiamanti. Anche dette Code FIFO.";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Wachtrijen worden gebruikt om bellers op volgorde FIFO af te handelen.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "As filas são usados​para configurar as filas de espera para chamadores. Também conhecida como filas FIFO.";
@@ -45,5 +45,8 @@
 		$apps[$x]['permissions'][$y]['name'] = "fifo_delete";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${domain_name}";
 
 ?>

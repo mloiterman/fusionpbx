@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2018
+	Portions created by the Initial Developer are Copyright (C) 2008-2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -131,6 +131,7 @@
 	echo "	<table cellpadding='0' cellspacing='0' border='0'>\n";
 	echo "		<tr>\n";
 	echo "			<td style='vertical-align: top;'>\n";
+	echo "				<input type='button' class='btn' name='' alt='back' onclick=\"window.location='xml_cdr.php'\" value=\"".$text['button-back']."\">";
 	if (permission_exists('xml_cdr_all')) {
 		if ($_REQUEST['show'] != 'alll') {
 			echo "		<input type='button' class='btn' value='".$text['button-show_all']."' onclick=\"window.location='xml_cdr_archive.php?show=all';\">\n";
@@ -148,15 +149,12 @@
 	}
 //	echo "				<input type='button' class='btn' value='".$text['button-statistics']."' onclick=\"document.location.href='xml_cdr_statistics.php';\">\n";
 	echo "				<input type='button' class='btn' value='".$text['button-export']."' onclick=\"toggle_select('export_format');\">\n";
-	echo "				<input type='button' class='btn' name='' alt='back' onclick=\"window.location='xml_cdr.php'\" value='Back'>";	
-	echo "			</td>";
-	echo "			<td style='vertical-align: top;'>";
 	echo "				<select class='formfld' style='display: none; width: auto; margin-left: 3px;' name='export_format' id='export_format' onchange=\"display_message('".$text['message-preparing_download']."'); toggle_select('export_format'); document.getElementById('frm_export').submit();\">\n";
 	echo "					<option value=''>...</option>\n";
 	echo "					<option value='csv'>CSV</option>\n";
 	echo "					<option value='pdf'>PDF</option>\n";
 	echo "				</select>\n";
-	echo "			</td>\n";
+	echo "			</td>";
 	echo "			<td style='vertical-align: top; padding-left: 15px;'>".$paging_controls_mini."</td>\n";
 	echo "		</tr>\n";
 	echo "	</table>\n";
@@ -250,8 +248,8 @@
 				echo "			".$text['label-start_range']."\n";
 				echo "		</td>\n";
 				echo "		<td class='vtable' align='left' style='position: relative; min-width: 250px;'>\n";
-				echo "			<input type='text' class='formfld datetimepicker' style='min-width: 115px; width: 115px;' name='start_stamp_begin' placeholder='".$text['label-from']."' value='".escape($start_stamp_begin)."'>\n";
-				echo "			<input type='text' class='formfld datetimepicker' style='min-width: 115px; width: 115px;' name='start_stamp_end' placeholder='".$text['label-to']."' value='".escape($start_stamp_end)."'>\n";
+				echo "			<input type='text' class='formfld datetimepicker' data-toggle='datetimepicker' data-target='#start_stamp_begin' onblur=\"$(this).datetimepicker('hide');\" style='min-width: 115px; width: 115px;' name='start_stamp_begin' id='start_stamp_begin' placeholder='".$text['label-from']."' value='".escape($start_stamp_begin)."'>\n";
+				echo "			<input type='text' class='formfld datetimepicker' data-toggle='datetimepicker' data-target='#start_stamp_end' onblur=\"$(this).datetimepicker('hide');\" style='min-width: 115px; width: 115px;' name='start_stamp_end' id='start_stamp_end' placeholder='".$text['label-to']."' value='".escape($start_stamp_end)."'>\n";
 				echo "		</td>\n";
 				echo "	</tr>\n";
 				echo "	<tr>\n";
@@ -271,7 +269,7 @@
 
 				echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 				echo "	<tr>\n";
-				if (permission_exists('hangup_cause')) {
+				if (permission_exists('xml_cdr_hangup_cause')) {
 					echo "		<td class='vncell' valign='top' nowrap='nowrap'>\n";
 					echo "			".$text['label-hangup_cause']."\n";
 					echo "		</td>\n";
@@ -320,7 +318,7 @@
 					echo "		</td>\n";
 					echo "	</tr>\n";
 				}
-				if (permission_exists('caller_destination')) {
+				if (permission_exists('xml_cdr_caller_destination')) {
 					echo "	<tr>\n";
 					echo "		<td class='vncell' valign='top' nowrap='nowrap'>\n";
 					echo "			".$text['label-caller_destination']."\n";
@@ -378,11 +376,11 @@
 		}
 		echo th_order_by('caller_id_name', $text['label-caller_id_name'], $order_by, $order, null, null, $param);
 		echo th_order_by('caller_id_number', $text['label-caller_id_number'], $order_by, $order, null, null, $param);
-		if (permission_exists('caller_destination')) {
+		if (permission_exists('xml_cdr_caller_destination')) {
 			echo th_order_by('caller_destination', $text['label-caller_destination'], $order_by, $order, null, null, $param);
 		}
 		echo th_order_by('destination_number', $text['label-destination'], $order_by, $order, null, null, $param);
-		if (permission_exists('recording_play') || permission_exists('recording_download')) {
+		if (permission_exists('xml_cdr_recording_play') || permission_exists('xml_cdr_recording_download')) {
 			echo "<th>".$text['label-recording']."</th>\n";
 			$col_count++;
 		}
@@ -412,7 +410,7 @@
 			echo th_order_by('rtp_audio_in_mos', $text['label-mos'], $order_by, $order, null, "style='text-align: center;'", $param, $text['description-mos']);
 			$col_count++;
 		}
-		if (permission_exists('hangup_cause')) {
+		if (permission_exists('xml_cdr_hangup_cause')) {
 			echo th_order_by('hangup_cause', $text['label-hangup_cause'], $order_by, $order, null, null, $param);
 		}
 		else {
@@ -468,7 +466,7 @@
 				$seconds = ($row['hangup_cause']=="ORIGINATOR_CANCEL") ? $row['duration'] : round(($row['billmsec'] / 1000), 0, PHP_ROUND_HALF_UP);
 
 			//determine recording properties
-				if (permission_exists('recording_play') || permission_exists('recording_download')) {
+				if (permission_exists('xml_cdr_recording_play') || permission_exists('xml_cdr_recording_download')) {
 					$record_path = $row['record_path'];
 					$record_name = $row['record_name'];
 					//$record_name = strtolower(pathinfo($tmp_name, PATHINFO_BASENAME));
@@ -481,7 +479,7 @@
 				}
 
 			//recording playback
-				if (permission_exists('recording_play') && $record_path != '') {
+				if (permission_exists('xml_cdr_recording_play') && $record_path != '') {
 					echo "<tr id='recording_progress_bar_".escape($row['xml_cdr_uuid'])."' style='display: none;'><td class='".$row_style[$c]." playback_progress_bar_background' style='padding: 0; border: none;' colspan='".escape($col_count)."'><span class='playback_progress_bar' id='recording_progress_".escape($row['xml_cdr_uuid'])."'></span></td></tr>\n";
 				}
 
@@ -544,7 +542,7 @@
 				echo "		</a>";
 				echo "	</td>\n";
 			//caller destination
-				if (permission_exists('caller_destination')) {
+				if (permission_exists('xml_cdr_caller_destination')) {
 					echo "	<td valign='top' class='".$row_style[$c]." tr_link_void' nowrap='nowrap'>";
 					echo "		<a href=\"javascript:void(0)\" onclick=\"send_cmd('".PROJECT_PATH."/app/click_to_call/click_to_call.php?src_cid_name=".urlencode(escape($row['caller_id_name']))."&src_cid_number=".urlencode(escape($row['caller_id_number']))."&dest_cid_name=".urlencode($_SESSION['user']['extension'][0]['outbound_caller_id_name'])."&dest_cid_number=".urlencode($_SESSION['user']['extension'][0]['outbound_caller_id_number'])."&src=".urlencode($_SESSION['user']['extension'][0]['user'])."&dest=".urlencode(escape($row['caller_destination']))."&rec=false&ringback=us-ring&auto_answer=true');\">\n";
 					if (is_numeric($row['caller_destination'])) {
@@ -568,17 +566,17 @@
 				echo "		</a>\n";
 				echo "	</td>\n";
 			//recording
-				if (permission_exists('recording_play') || permission_exists('recording_download')) {
+				if (permission_exists('xml_cdr_recording_play') || permission_exists('xml_cdr_recording_download')) {
 					if ($record_path != '' && file_exists($record_path.'/'.$record_name)) {
 						echo "	<td valign='top' align='center' class='".$row_style[$c]." row_style_slim tr_link_void' nowrap='nowrap'>";
-						if (permission_exists('recording_play')) {
+						if (permission_exists('xml_cdr_recording_play')) {
 							echo 	"<audio id='recording_audio_".escape($row['xml_cdr_uuid'])."' style='display: none;' preload='none' ontimeupdate=\"update_progress('".escape($row['xml_cdr_uuid'])."')\" onended=\"recording_reset('".escape($row['xml_cdr_uuid'])."');\" src=\"download.php?id=".escape($row['xml_cdr_uuid'])."&t=record\" type='".escape($record_type)."'></audio>";
 							echo 	"<span id='recording_button_".escape($row['xml_cdr_uuid'])."' onclick=\"recording_play('".escape($row['xml_cdr_uuid'])."')\" title='".$text['label-play']." / ".$text['label-pause']."'>".$v_link_label_play."</span>";
 						}
 						else {
-							echo "don't have recording_play permission ";
+							echo "don't have xml_cdr_recording_play permission ";
 						}
-						if (permission_exists('recording_download')) {
+						if (permission_exists('xml_cdr_recording_download')) {
 							echo 	"<a href=\"download.php?id=".escape($row['xml_cdr_uuid'])."&t=bin\" title='".$text['label-download']."'>".$v_link_label_download."</a>";
 						}
 						echo "	</td>\n";
@@ -677,7 +675,7 @@
 					echo "	<td valign='top' class='".$row_style[$c]."'$title style='text-align: center;'>".escape($value)."</td>\n";
 				}
 			//hangup cause/call result
-				if (permission_exists('hangup_cause')) {
+				if (permission_exists('xml_cdr_hangup_cause')) {
 					echo "	<td valign='top' class='".$row_style[$c]."' nowrap='nowrap'><a ".escape($tr_link).">".escape($hangup_cause)."</a></td>\n";
 				}
 				else {

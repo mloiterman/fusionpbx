@@ -1,5 +1,5 @@
 --	Part of FusionPBX
---	Copyright (C) 2013-2017 Mark J Crane <markjcrane@fusionpbx.com>
+--	Copyright (C) 2013-2019 Mark J Crane <markjcrane@fusionpbx.com>
 --	All rights reserved.
 --
 --	Redistribution and use in source and binary forms, with or without
@@ -236,7 +236,7 @@
 
 		--get the voicemail settings
 			if (voicemail_id ~= nil) then
-				if (session:ready()) then
+				if (session ~= nil and session:ready()) then
 					--get the information from the database
 						local sql = [[SELECT * FROM v_voicemails
 							WHERE domain_uuid = :domain_uuid
@@ -257,6 +257,7 @@
 							voicemail_transcription_enabled = row["voicemail_transcription_enabled"];
 							voicemail_tutorial = row["voicemail_tutorial"];
 						end);
+
 					--set default values
 						if (voicemail_local_after_email == nil) then
 							voicemail_local_after_email = "true";
@@ -268,7 +269,7 @@
 					--valid voicemail
 						if (voicemail_uuid ~= nil and string.len(voicemail_uuid) > 0) then
 						--answer the session
-							if (session:ready()) then
+							if (session ~= nil and session:ready()) then
 								session:answer();
 								session:execute("sleep", "1000");
 							end
@@ -282,7 +283,7 @@
 	end
 
 --set the callback function
-	if (session:ready()) then
+	if (session ~= nil and session:ready()) then
 		session:setVariable("playback_terminators", "#");
 		session:setInputCallback("on_dtmf", "");
 	end
@@ -322,7 +323,7 @@
 	require "app.voicemail.resources.functions.record_name";
 	require "app.voicemail.resources.functions.message_count"
 	require "app.voicemail.resources.functions.mwi_notify";
-	require "app.voicemail.resources.functions.tutorial";	
+	require "app.voicemail.resources.functions.tutorial";
 
 --send a message waiting event
 	if (voicemail_action == "mwi") then
@@ -351,7 +352,7 @@
 
 --check messages
 	if (voicemail_action == "check") then
-		if (session:ready()) then
+		if (session ~= nil and session:ready()) then
 			--check the voicemail password
 				if (voicemail_id) then
 					if (voicemail_authorized) then
@@ -383,6 +384,13 @@
 
 --leave a message
 	if (voicemail_action == "save") then
+
+		--set the variables
+			if (session ~= nil and session:ready()) then
+				session:setVariable("missed_call", "true");
+				session:setVariable("voicemail_answer_stamp", api:execute("strftime"));
+				session:setVariable("voicemail_answer_epoch", api:execute("strepoch"));
+			end
 
 		--check the voicemail quota
 			if (voicemail_uuid ~= nil and vm_disk_quota ~= nil) then
@@ -430,7 +438,7 @@
 
 							if file_exists(full_path) then
 								--read file content as base64 string
-									message_base64 = assert(file.read_base64(full_path));
+									message_base64 = file.read_base64(full_path);
 									--freeswitch.consoleLog("notice", "[voicemail] ".. message_base64 .. "\n");
 
 								--delete the file
@@ -445,21 +453,25 @@
 					--freeswitch.consoleLog("notice", "[voicemail][destinations] SQL:" .. sql .. "; params:" .. json.encode(params) .. "\n");
 					destinations = {};
 					x = 1;
-					table.insert(destinations, {domain_uuid=domain_uuid,voicemail_destination_uuid=voicemail_uuid,voicemail_uuid=voicemail_uuid,voicemail_uuid_copy=voicemail_uuid});
-					x = x + 1;
-					assert(dbh:query(sql, params, function(row)
+					
+					dbh:query(sql, params, function(row)
 						destinations[x] = row;
 						x = x + 1;
-					end));
-
+					end);
+					table.insert(destinations, {domain_uuid=domain_uuid,voicemail_destination_uuid=voicemail_uuid,voicemail_uuid=voicemail_uuid,voicemail_uuid_copy=voicemail_uuid});
 				--show the storage type
 					freeswitch.consoleLog("notice", "[voicemail] ".. storage_type .. "\n");
-
+					
+					count = 0
+					for k,v in pairs(destinations) do
+						count = count + 1
+					end
+					
 				--loop through the voicemail destinations
 					y = 1;
 					for key,row in pairs(destinations) do
 						--determine uuid
-							if (y == 1) then
+							if (y == count) then
 								voicemail_message_uuid = uuid;
 							else
 								voicemail_message_uuid = api:execute("create_uuid");
@@ -595,7 +607,7 @@
 
 			else
 				--voicemail not enabled or does not exist
-					if (session:ready()) then
+					if (session ~= nil and session:ready()) then
 						referred_by = session:getVariable("sip_h_Referred-By");
 						if (referred_by) then
 							referred_by = referred_by:match('[%d]+');

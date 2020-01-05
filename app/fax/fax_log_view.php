@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2018
+	Portions created by the Initial Developer are Copyright (C) 2008-2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -42,18 +42,24 @@
 	$language = new text;
 	$text = $language->get();
 
-//pre-populate the form
-	if (isset($_REQUEST["id"]) && isset($_REQUEST["fax_uuid"])) {
-		$fax_log_uuid = check_str($_REQUEST["id"]);
-		$fax_uuid = check_str($_REQUEST["fax_uuid"]);
+//validate the uuids
+	if (is_uuid($_REQUEST["id"])) {
+		$fax_log_uuid = $_REQUEST["id"];
+	}
+	if (is_uuid($_REQUEST["fax_uuid"])) {
+		$fax_uuid = $_REQUEST["fax_uuid"];
+	}
 
+//pre-populate the form
+	if (is_uuid($fax_log_uuid) && is_uuid($fax_uuid)) {
 		$sql = "select * from v_fax_logs ";
-		$sql .= "where domain_uuid = '".$domain_uuid."' ";
-		$sql .= "and fax_log_uuid = '".$fax_log_uuid."' ";
-		$prep_statement = $db->prepare(check_sql($sql));
-		$prep_statement->execute();
-		$result = $prep_statement->fetchAll(PDO::FETCH_NAMED);
-		foreach ($result as &$row) {
+		$sql .= "where domain_uuid = :domain_uuid ";
+		$sql .= "and fax_log_uuid = :fax_log_uuid ";
+		$parameters['domain_uuid'] = $domain_uuid;
+		$parameters['fax_log_uuid'] = $fax_log_uuid;
+		$database = new database;
+		$row = $database->select($sql, $parameters, 'row');
+		if (is_array($row) && @sizeof($row) != 0) {
 			$fax_log_uuid = $row["fax_log_uuid"];
 			$fax_success = $row["fax_success"];
 			$fax_result_code = $row["fax_result_code"];
@@ -73,16 +79,15 @@
 			$fax_uri = $row["fax_uri"];
 			$fax_date = $row["fax_date"];
 			$fax_epoch = $row["fax_epoch"];
-			break; //limit to 1 row
 		}
-		unset ($prep_statement);
+		unset($sql, $parameters, $row);
 	}
 
 //show the header
 	require_once "resources/header.php";
 
 //show the content
-	echo "<table cellpadding='0' cellspacing='0' border='0' align='right'><tr><td><input type='button' class='btn' alt='".$text['button-back']."' onclick=\"document.location='fax_logs.php?id=".$fax_uuid."'\" value='".$text['button-back']."'></td></tr></table>";
+	echo "<table cellpadding='0' cellspacing='0' border='0' align='right'><tr><td><input type='button' class='btn' alt='".$text['button-back']."' onclick=\"document.location='fax_logs.php?id=".urlencode($fax_uuid)."'\" value='".$text['button-back']."'></td></tr></table>";
 	echo "<b>".$text['title-fax_log']."</b>\n";
 	echo "<br /><br />\n";
 
@@ -90,32 +95,32 @@
 
 	echo "<tr>\n";
 	echo "<td width='30%' class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_success']."</td>\n";
-	echo "<td width='70%' class='vtable'>".$fax_success."</td>\n";
+	echo "<td width='70%' class='vtable'>".escape($fax_success)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_result_code']."</td>\n";
-	echo "<td class='vtable'>".$fax_result_code."</td>\n";
+	echo "<td class='vtable'>".escape($fax_result_code)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_result_text']."</td>\n";
-	echo "<td class='vtable'>".$fax_result_text."</td>\n";
+	echo "<td class='vtable'>".escape($fax_result_text)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_file']."</td>\n";
-	echo "<td class='vtable'>".$fax_file."</td>\n";
+	echo "<td class='vtable'>".escape($fax_file)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_ecm_used']."</td>\n";
-	echo "<td class='vtable'>".$fax_ecm_used."</td>\n";
+	echo "<td class='vtable'>".escape($fax_ecm_used)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_local_station_id']."</td>\n";
-	echo "<td class='vtable'>".$fax_local_station_id."</td>\n";
+	echo "<td class='vtable'>".escape($fax_local_station_id)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
@@ -125,57 +130,57 @@
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_document_total_pages']."</td>\n";
-	echo "<td class='vtable'>".$fax_document_total_pages."</td>\n";
+	echo "<td class='vtable'>".escape($fax_document_total_pages)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_image_resolution']."</td>\n";
-	echo "<td class='vtable'>".$fax_image_resolution."</td>\n";
+	echo "<td class='vtable'>".escape($fax_image_resolution)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_image_size']."</td>\n";
-	echo "<td class='vtable'>".$fax_image_size."</td>\n";
+	echo "<td class='vtable'>".escape($fax_image_size)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_bad_rows']."</td>\n";
-	echo "<td class='vtable'>".$fax_bad_rows."</td>\n";
+	echo "<td class='vtable'>".escape($fax_bad_rows)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_transfer_rate']."</td>\n";
-	echo "<td class='vtable'>".$fax_transfer_rate."</td>\n";
+	echo "<td class='vtable'>".escape($fax_transfer_rate)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_retry_attempts']."</td>\n";
-	echo "<td class='vtable'>".$fax_retry_attempts."</td>\n";
+	echo "<td class='vtable'>".escape($fax_retry_attempts)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_retry_limit']."</td>\n";
-	echo "<td class='vtable'>".$fax_retry_limit."</td>\n";
+	echo "<td class='vtable'>".escape($fax_retry_limit)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_retry_sleep']."</td>\n";
-	echo "<td class='vtable'>".$fax_retry_sleep."</td>\n";
+	echo "<td class='vtable'>".escape($fax_retry_sleep)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_uri']."</td>\n";
-	echo "<td class='vtable'>".$fax_uri."</td>\n";
+	echo "<td class='vtable'>".escape($fax_uri)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_date']."</td>\n";
-	echo "<td class='vtable'>".$fax_date."</td>\n";
+	echo "<td class='vtable'>".escape($fax_date)."</td>\n";
 	echo "</tr>\n";
 
 	echo "<tr>\n";
 	echo "<td class='vncell' valign='top' nowrap='nowrap'>".$text['label-fax_epoch']."</td>\n";
-	echo "<td class='vtable'>".$fax_epoch."</td>\n";
+	echo "<td class='vtable'>".escape($fax_epoch)."</td>\n";
 	echo "</tr>\n";
 
 	echo "</table>";

@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2018
+	Portions created by the Initial Developer are Copyright (C) 2008-2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -86,11 +86,11 @@
 	}
 
 	var requestTime = function() {
-		var url = 'registrations.php?template=false&profile=&show=<?php echo $show; ?>';
+		var url = 'registrations.php?reload&show=<?php echo escape($show); ?>';
 		new loadXmlHttp(url, 'ajax_response');
 		<?php
 		if (strlen($_SESSION["ajax_refresh_rate"]) == 0) { $_SESSION["ajax_refresh_rate"] = "1800"; }
-		echo "setInterval(function(){new loadXmlHttp(url, 'ajax_reponse');}, ".$_SESSION["ajax_refresh_rate"].");";
+		echo "setInterval(function(){new loadXmlHttp(url, 'ajax_reponse');}, ".escape($_SESSION["ajax_refresh_rate"]).");";
 		?>
 	}
 

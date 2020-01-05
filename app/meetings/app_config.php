@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Gebruikers zoeken, toevoegen, bewerken en verwijderen.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "";
@@ -106,6 +106,8 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_domains";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "domain_uuid";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "meeting_user_uuid";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['pgsql'] = "uuid";
@@ -118,11 +120,16 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_meetings";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "meeting_uuid";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "user_uuid";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['pgsql'] = "uuid";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
-		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "user_uuid";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_users";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "user_uuid";
+		$apps[$x]['db'][$y]['fields'][$z]['description']['en-us'] = "";
 
 ?>

@@ -4,6 +4,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Menü Einstellungen";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Menü Einstellungen";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Διαχειριστής Μενού";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Gestor de Menú";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -12,7 +13,7 @@
 	$apps[$x]['menu'][$y]['title']['it-it'] = "Gestione dei Menu";
 	$apps[$x]['menu'][$y]['title']['nl-nl'] = "";
 	$apps[$x]['menu'][$y]['title']['pl-pl'] = "Menedżer menu";
-	$apps[$x]['menu'][$y]['title']['pt-br'] = "Menu Admistrador";
+	$apps[$x]['menu'][$y]['title']['pt-br'] = "Gerenciador de Menus";
 	$apps[$x]['menu'][$y]['title']['pt-pt'] = "Gestor de Menus";
 	$apps[$x]['menu'][$y]['title']['ro-ro'] = "";
 	$apps[$x]['menu'][$y]['title']['ru-ru'] = "Управление меню";
@@ -28,6 +29,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Home";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Home";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Αρχική";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Casa";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -36,7 +38,7 @@
 	$apps[$x]['menu'][$y]['title']['it-it'] = "Home";
 	$apps[$x]['menu'][$y]['title']['nl-nl'] = "";
 	$apps[$x]['menu'][$y]['title']['pl-pl'] = "Dom";
-	$apps[$x]['menu'][$y]['title']['pt-br'] = "Casa";
+	$apps[$x]['menu'][$y]['title']['pt-br'] = "Principal";
 	$apps[$x]['menu'][$y]['title']['pt-pt'] = "Casa";
 	$apps[$x]['menu'][$y]['title']['ro-ro'] = "";
 	$apps[$x]['menu'][$y]['title']['ru-ru'] = "Основные";
@@ -45,7 +47,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = "02194288-6d56-6d3e-0b1a-d53a2bc10788";
 	$apps[$x]['menu'][$y]['parent_uuid'] = "";
 	$apps[$x]['menu'][$y]['category'] = "internal";
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-home";
+	$apps[$x]['menu'][$y]['icon'] = "fa-home";
 	$apps[$x]['menu'][$y]['path'] = "";
 	$apps[$x]['menu'][$y]['order'] = "5";
 	$apps[$x]['menu'][$y]['groups'][] = "superadmin";
@@ -57,6 +59,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Konten";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Konten";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Λογαριασμοί";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Cuentas";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -74,7 +77,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = "bc96d773-ee57-0cdd-c3ac-2d91aba61b55";
 	$apps[$x]['menu'][$y]['parent_uuid'] = "";
 	$apps[$x]['menu'][$y]['category'] = "internal";
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-user";
+	$apps[$x]['menu'][$y]['icon'] = "fa-user";
 	$apps[$x]['menu'][$y]['path'] = "";
 	$apps[$x]['menu'][$y]['order'] = "10";
 	$apps[$x]['menu'][$y]['groups'][] = "admin";
@@ -84,6 +87,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Status";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Status";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Κατάσταση";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Estado";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -92,7 +96,7 @@
 	$apps[$x]['menu'][$y]['title']['it-it'] = "Stato";
 	$apps[$x]['menu'][$y]['title']['nl-nl'] = "";
 	$apps[$x]['menu'][$y]['title']['pl-pl'] = "Status ";
-	$apps[$x]['menu'][$y]['title']['pt-br'] = "Estados";
+	$apps[$x]['menu'][$y]['title']['pt-br'] = "Estado";
 	$apps[$x]['menu'][$y]['title']['pt-pt'] = "Estado";
 	$apps[$x]['menu'][$y]['title']['ro-ro'] = "";
 	$apps[$x]['menu'][$y]['title']['ru-ru'] = "Статус";
@@ -101,7 +105,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = "0438b504-8613-7887-c420-c837ffb20cb1";
 	$apps[$x]['menu'][$y]['parent_uuid'] = "";
 	$apps[$x]['menu'][$y]['category'] = "internal";
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-equalizer";
+	$apps[$x]['menu'][$y]['icon'] = "fa-chart-bar";
 	$apps[$x]['menu'][$y]['path'] = "";
 	$apps[$x]['menu'][$y]['order'] = "25";
 	$apps[$x]['menu'][$y]['groups'][] = "user";
@@ -112,6 +116,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Erweitert";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Erweitert";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Για προχωρημένους";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Avanzado";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -129,7 +134,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = "594d99c5-6128-9c88-ca35-4b33392cec0f";
 	$apps[$x]['menu'][$y]['parent_uuid'] = "";
 	$apps[$x]['menu'][$y]['category'] = "internal";
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-cog";
+	$apps[$x]['menu'][$y]['icon'] = "fa-cog";
 	$apps[$x]['menu'][$y]['path'] = "";
 	$apps[$x]['menu'][$y]['order'] = "30";
 	$apps[$x]['menu'][$y]['groups'][] = "superadmin";
@@ -138,6 +143,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = "Anmelden";
 	$apps[$x]['menu'][$y]['title']['de-de'] = "Anmelden";
+	$apps[$x]['menu'][$y]['title']['el-gr'] = "Είσοδος";
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "Ingresar";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = "";
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -146,7 +152,7 @@
 	$apps[$x]['menu'][$y]['title']['it-it'] = "Login";
 	$apps[$x]['menu'][$y]['title']['nl-nl'] = "";
 	$apps[$x]['menu'][$y]['title']['pl-pl'] = "";
-	$apps[$x]['menu'][$y]['title']['pt-br'] = "";
+	$apps[$x]['menu'][$y]['title']['pt-br'] = "Entrar";
 	$apps[$x]['menu'][$y]['title']['pt-pt'] = "Entrar";
 	$apps[$x]['menu'][$y]['title']['ro-ro'] = "";
 	$apps[$x]['menu'][$y]['title']['ru-ru'] = "Войти";
@@ -155,7 +161,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = "c85bf816-b88d-40fa-8634-11b456928afa";
 	$apps[$x]['menu'][$y]['parent_uuid'] = "";
 	$apps[$x]['menu'][$y]['category'] = "internal";
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-log-in";
+	$apps[$x]['menu'][$y]['icon'] = "fa-sign-in-alt";
 	$apps[$x]['menu'][$y]['path'] = "/login.php";
 	$apps[$x]['menu'][$y]['groups'][] = "public";
 	$apps[$x]['menu'][$y]['order'] = "99";
@@ -164,6 +170,7 @@
 	$apps[$x]['menu'][$y]['title']['ar-eg'] = "";
 	$apps[$x]['menu'][$y]['title']['de-at'] = 'Abmelden';
 	$apps[$x]['menu'][$y]['title']['de-de'] = 'Abmelden';
+	$apps[$x]['menu'][$y]['title']['el-gr'] = 'Έξοδος';
 	$apps[$x]['menu'][$y]['title']['es-cl'] = "";
 	$apps[$x]['menu'][$y]['title']['es-mx'] = 'Salir';
 	$apps[$x]['menu'][$y]['title']['fr-ca'] = "";
@@ -172,7 +179,7 @@
 	$apps[$x]['menu'][$y]['title']['it-it'] = "Logout";
 	$apps[$x]['menu'][$y]['title']['nl-nl'] = "";
 	$apps[$x]['menu'][$y]['title']['pl-pl'] = 'Wyloguj';
-	$apps[$x]['menu'][$y]['title']['pt-pt'] = 'Sair';
+	$apps[$x]['menu'][$y]['title']['pt-br'] = 'Sair';
 	$apps[$x]['menu'][$y]['title']['pt-pt'] = "";
 	$apps[$x]['menu'][$y]['title']['ro-ro'] = "";
 	$apps[$x]['menu'][$y]['title']['ru-ru'] = 'Выйти';
@@ -181,7 +188,7 @@
 	$apps[$x]['menu'][$y]['uuid'] = '0d29e9f4-0c9b-9d8d-cd2d-454899dc9bc4';
 	$apps[$x]['menu'][$y]['parent_uuid'] = '02194288-6d56-6d3e-0b1a-d53a2bc10788';
 	$apps[$x]['menu'][$y]['category'] = 'internal';
-	$apps[$x]['menu'][$y]['icon'] = "glyphicon-log-out";
+	$apps[$x]['menu'][$y]['icon'] = "fa-sign-out-alt";
 	$apps[$x]['menu'][$y]['path'] = '/logout.php';
 	$apps[$x]['menu'][$y]['groups'][] = 'superadmin';
 	$apps[$x]['menu'][$y]['groups'][] = 'admin';

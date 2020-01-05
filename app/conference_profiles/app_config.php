@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Een groep conferentie parameters die gezamenlijk als profiel opgeslagen zijn.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "";
@@ -104,7 +104,7 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
-		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_conference_profile";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_conference_profiles";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "conference_profile_uuid";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "profile_param_name";

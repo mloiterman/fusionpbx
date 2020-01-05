@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "Les conferences servent à configurer des salles avec un nom, une description et un code pin facultatif";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Conferenties worden gebruikt om gespreksruimtes op te zetten met een naam omschrijving en optionele PIN code.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "Conferências é usado para configurar salas de conferências com um nome, descrição e número de pin opcional.";
@@ -63,10 +63,6 @@
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
 		$y++;
-		$apps[$x]['permissions'][$y]['name'] = "conference_delete";
-		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
-		$apps[$x]['permissions'][$y]['groups'][] = "admin";
-		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "conference_user_view";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";;
@@ -82,6 +78,9 @@
 		$apps[$x]['permissions'][$y]['name'] = "conference_user_delete";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$apps[$x]['permissions'][$y]['groups'][] = "admin";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${domain_name}";
 
 	//schema details
 		$y=0;

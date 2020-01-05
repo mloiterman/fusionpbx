@@ -1,7 +1,7 @@
 <?php
 
 	//application details
-		$apps[$x]['name'] = "IVR Menu";
+		$apps[$x]['name'] = "IVR Menus";
 		$apps[$x]['uuid'] = "a5788e9b-58bc-bd1b-df59-fff5d51253ab";
 		$apps[$x]['category'] = "Switch";
 		$apps[$x]['subcategory'] = "";
@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "Le menu SVI joue un enregistrement ou une phrase prédéfinie permettant à l'appelant de faire un choix. Ce choix l'amenant sur une destination spécifique. Cette destination peut être une extension, une messagerie vocale, un IVR, un groupement, un FAX ...";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Het IVR menu speelt een vooraf opgenomen tekst af die de beller opties om uit te kiezen ggeft. Elke optie krijgt een specifieke bestemming. De bestemming kan een toestel, antwoorapparaat, IVR menu, belgroep etc. zijn.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "O menu IVR toca uma gravação ou uma frase pré-definidos, que são apresentados ao chamador na forma de opções para escolher. Cada opção tem um destino correspondente. Os destinos podem ser extensões, correio de voz, outros IVRs, grupos, extensões de fax, etc.";
@@ -37,6 +37,7 @@
 		$apps[$x]['destinations'][$y]['order_by'] = "ivr_menu_extension asc";
 		$apps[$x]['destinations'][$y]['field']['name'] = "ivr_menu_name";
 		$apps[$x]['destinations'][$y]['field']['destination'] = "ivr_menu_extension";
+		$apps[$x]['destinations'][$y]['field']['context'] = "ivr_menu_context";
 		$apps[$x]['destinations'][$y]['select_value']['dialplan'] = "transfer:\${destination} XML \${context}";
 		$apps[$x]['destinations'][$y]['select_value']['ivr'] = "menu-exec-app:transfer \${destination} XML \${context}";
 		$apps[$x]['destinations'][$y]['select_label'] = "\${destination} \${name}";
@@ -124,6 +125,9 @@
 		$apps[$x]['default_settings'][$y]['default_setting_value'] = "3";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${ivr_menu_context}";
 
 	//schema details
 		$y=0;

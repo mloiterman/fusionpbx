@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Directe oproepen tussen twee bestemmingen via een feature code.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "";
@@ -63,6 +63,9 @@
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "call_flow_context";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${call_flow_context}";
 
 	//schema details
 		$y=0;

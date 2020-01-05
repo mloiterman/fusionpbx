@@ -27,31 +27,53 @@
 //includes
 	require_once "root.php";
 	require_once "resources/require.php";
+	require_once "resources/check_auth.php";
+
+//check permissions
+	if (!permission_exists('message_delete')) {
+		echo "access denied";
+		exit;
+	}
 
 //add multi-lingual support
 	$language = new text;
 	$text = $language->get();
 
+//get the id
+	$message_uuids = $_REQUEST['messages'];
+
 //delete the message
-	message::add($text['message-delete']);
+	if (is_array($message_uuids) && @sizeof($message_uuids) != 0) {
 
-//delete the data
-	if (isset($_GET["id"]) && is_uuid($_GET["id"]) && permission_exists('message_delete')) {
+		//build delete array
+			foreach ($message_uuids as $index => $message_uuid) {
+				$array['messages'][$index]['message_uuid'] = $message_uuid;
+				$array['messages'][$index]['domain_uuid'] = $domain_uuid;
+				$array['message_media'][$index]['message_uuid'] = $message_uuid;
+				$array['message_media'][$index]['domain_uuid'] = $domain_uuid;
+			}
+		
+		//grant temporary permissions
+			$p = new permissions;
+			$p->add('message_media_delete', 'temp');
+		
+		//execute delete
+			$database = new database;
+			$database->app_name = 'messages';
+			$database->app_uuid = '4a20815d-042c-47c8-85df-085333e79b87';
+			$database->delete($array);
+			unset($array);
+		
+		//revoke temporary permissions
+			$p->delete('message_media_delete', 'temp');
 
-		//get the id
-			$id = check_str($_GET["id"]);
+		//set message
+			message::add($text['message-delete']);
 
-		//delete message
-			$sql = "delete from v_messages ";
-			$sql .= "where message_uuid = '$id' ";
-			$sql .= "and domain_uuid = '$domain_uuid' ";
-			$prep_statement = $db->prepare(check_sql($sql));
-			$prep_statement->execute();
-			unset($sql);
-
-		//redirect the user
-			header('Location: messages_log.php');
 	}
 
+//redirect the user
+	header('Location: messages_log.php');
+	exit;
 
 ?>

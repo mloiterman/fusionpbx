@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "Les dialplans son utilisés pour configurer les destinations d'appels selon des conditions et contextes.  Vous pouvez en utiliser pour diriger les appels vers les passerelles, IVR, numéross exterieurs ou tout autre destination.";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Het kiesplan wordt gebruikt om oproep bestemmingen die aan de voorwaarden en context voldoet te kiezen. het kiespaln kan worden gebruikt om oproepen naar gateways, antwoordapparaten, externe nummers, scripts of enig andere bestemming te kiezen.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "O dialplan é usado para configurar destinos de chamada com base nas condições e contexto. Você pode usar o dialplan para enviar chamadas para gateways, atendedores automáticos, números externos, para scripts, ou qualquer destino.";
@@ -65,6 +65,9 @@
 		$apps[$x]['permissions'][$y]['name'] = "dialplan_xml";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "dialplan_context";
+		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "dialplan_detail_view";
 		$apps[$x]['permissions'][$y]['menu']['uuid'] = "b94e8bd9-9eb5-e427-9c26-ff7a6c21552a";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
@@ -81,6 +84,12 @@
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "dialplan_domain";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "dialplan_all";
+		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${dialplan_context}";
 
 	//schema details
 		$y=0;

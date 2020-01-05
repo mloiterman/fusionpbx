@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Beheer toegangs controle lijsten";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "";
@@ -54,6 +54,9 @@
 		$apps[$x]['permissions'][$y]['name'] = "access_control_node_delete";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 		$y++;
+
+	//cache details
+		$apps[$x]['cache']['key'] = "configuration.acl.conf";
 
 	//schema details
 		$y=0;
@@ -93,7 +96,7 @@
 		$apps[$x]['db'][$y]['fields'][$z]['type']['sqlite'] = "text";
 		$apps[$x]['db'][$y]['fields'][$z]['type']['mysql'] = "char(36)";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['type'] = "foreign";
-		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_access_control";
+		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['table'] = "v_access_controls";
 		$apps[$x]['db'][$y]['fields'][$z]['key']['reference']['field'] = "access_control_uuid";
 		$z++;
 		$apps[$x]['db'][$y]['fields'][$z]['name'] = "node_type";

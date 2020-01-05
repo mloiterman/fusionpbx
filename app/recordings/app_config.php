@@ -19,7 +19,7 @@
 		$apps[$x]['description']['fr-fr'] = "Gestion des enregistrements principalement utilisés dans les IVR";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Beheer opnamen met name gebruikt in een IVR.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "";
 		$apps[$x]['description']['pt-pt'] = "Gestor de gravações utilizadas principalmente com um IVR.";
@@ -86,6 +86,31 @@
 		$apps[$x]['default_settings'][$y]['default_setting_value'] = "base64";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
+
+		$y=0;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "960828e1-8d6b-4381-86c4-fa03fce4276a";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "recordings";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "recording_max_length";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "text";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "300";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Maximum length of a recording (in seconds).";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "a1e837c6-e5bf-460f-aa7e-9b35d53d015a";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "recordings";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "recording_silence_threshold";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "text";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "200";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Energy level below this number is considered silence.";
+		$y++;
+		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "4db91322-83c1-4c6a-8966-f8db0b84cdcd";
+		$apps[$x]['default_settings'][$y]['default_setting_category'] = "recordings";
+		$apps[$x]['default_settings'][$y]['default_setting_subcategory'] = "recording_silence_seconds";
+		$apps[$x]['default_settings'][$y]['default_setting_name'] = "numeric";
+		$apps[$x]['default_settings'][$y]['default_setting_value'] = "3";
+		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
+		$apps[$x]['default_settings'][$y]['default_setting_description'] = "Seconds of silence to end the recording for the voicemail message.";
 
 	//schema details
 		$y=0;

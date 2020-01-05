@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2016-2018
+	Portions created by the Initial Developer are Copyright (C) 2016-2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -41,23 +41,46 @@
 
 //get (from) destinations
 	$sql = "select destination_number from v_destinations ";
-	$sql .= "where domain_uuid = '".$domain_uuid."' ";
+	$sql .= "where domain_uuid = :domain_uuid ";
 	$sql .= "and destination_type_text = 1 ";
 	$sql .= "and destination_enabled = 'true' ";
 	$sql .= "order by destination_number asc ";
-	$prep_statement = $db->prepare(check_sql($sql));
-	$prep_statement->execute();
-	$rows = $prep_statement->fetchAll(PDO::FETCH_NAMED);
-	//view_array($rows);
-	if (is_array($rows) && sizeof($rows)) {
+	$parameters['domain_uuid'] = $domain_uuid;
+	$database = new database;
+	$rows = $database->select($sql, $parameters, 'all');
+	if (is_array($rows) && @sizeof($rows)) {
 		foreach ($rows as $row) {
 			$destinations[] = $row['destination_number'];
 		}
 	}
-	unset ($prep_statement, $sql, $row, $record);
+	unset($sql, $parameters, $rows, $row);
+
+//get self (primary contact attachment) image
+	if (!is_array($_SESSION['tmp']['messages']['contact_me'])) {
+		$sql = "select attachment_filename as filename, attachment_content as image ";
+		$sql .= "from v_contact_attachments ";
+		$sql .= "where domain_uuid = :domain_uuid ";
+		$sql .= "and contact_uuid = :contact_uuid ";
+		$sql .= "and attachment_primary = 1 ";
+		$parameters['domain_uuid'] = $_SESSION['domain_uuid'];
+		$parameters['contact_uuid'] = $_SESSION['user']['contact_uuid'];
+		$database = new database;
+		$row = $database->select($sql, $parameters, 'row');
+		$_SESSION['tmp']['messages']['contact_me'] = $row;
+		unset($sql, $parameters, $row);
+	}
 
 //additional includes
 	require_once "resources/header.php";
+
+//resize thread window on window resize
+	echo "<script language='JavaScript' type='text/javascript'>\n";
+	echo "	$(document).ready(function() {\n";
+	echo "		$(window).on('resizeEnd', function() {\n";
+	echo "			$('div#thread_messages').animate({ 'max-height': $(window).height() - 480 }, 200);\n";
+	echo "		});\n";
+	echo " 	});\n";
+	echo "</script>\n";
 
 //styles
 	echo "<style>\n";
@@ -65,13 +88,13 @@
 	echo "	#message_new_layer {\n";
 	echo "		z-index: 999999;\n";
 	echo "		position: absolute;\n";
-	echo "		left: 0px;\n";
-	echo "		top: 0px;\n";
-	echo "		right: 0px;\n";
-	echo "		bottom: 0px;\n";
+	echo "		left: 0;\n";
+	echo "		top: 0;\n";
+	echo "		right: 0;\n";
+	echo "		bottom: 0;\n";
 	echo "		text-align: center;\n";
 	echo "		vertical-align: middle;\n";
-	echo "	}\n";
+	echo "		}\n";
 
 	echo "	#message_new_container {\n";
 	echo "		display: block;\n";
@@ -87,24 +110,42 @@
 	echo "		-webkit-box-shadow: 0px 1px 20px #888;\n";
 	echo "		-moz-box-shadow: 0px 1px 20px #888;\n";
 	echo "		box-shadow: 0px 1px 20px #888;\n";
-	echo "	}\n";
+	echo "		}\n";
 
 	echo "	#message_media_layer {\n";
 	echo "		z-index: 999999;\n";
 	echo "		position: absolute;\n";
-	echo "		left: 0px;\n";
-	echo "		top: 0px;\n";
-	echo "		right: 0px;\n";
-	echo "		bottom: 0px;\n";
+	echo "		left: 0;\n";
+	echo "		top: 0;\n";
+	echo "		right: 0;\n";
+	echo "		bottom: 0;\n";
 	echo "		text-align: center;\n";
 	echo "		vertical-align: middle;\n";
-	echo "	}\n";
+	echo "		}\n";
 
 	echo "	td.contact_selected {\n";
 	echo "		border-right: 5px solid ".($SESSION['theme']['table_row_border_color']['text'] != '' ? $SESSION['theme']['table_row_border_color']['text'] : '#c5d1e5').";\n";
-	echo "	}\n";
+	echo "		}\n";
+
+	echo "	.contact_list_image {\n";
+	echo "		float: left;\n";
+	echo "		width: 75px;\n";
+	echo "		height: 75px;\n";
+	echo "		margin: 3px 8px 3px 2px;\n";
+	echo "		border: 1px solid ".($SESSION['theme']['table_row_border_color']['text'] != '' ? $SESSION['theme']['table_row_border_color']['text'] : '#c5d1e5').";\n";
+	echo "		background-repeat: no-repeat;\n";
+	echo "		background-size: cover;\n";
+	echo "		background-position: center center;\n";
+	echo "		border-radius: 11px;\n";
+	echo "		}\n";
 
 	echo "</style>\n";
+
+//cache self (primary contact attachment) image
+	if (is_array($_SESSION['tmp']['messages']['contact_me']) && sizeof($_SESSION['tmp']['messages']['contact_me']) != 0) {
+		$attachment_type = strtolower(pathinfo($_SESSION['tmp']['messages']['contact_me']['filename'], PATHINFO_EXTENSION));
+		echo "<img id='src_message-bubble-image-me' style='display: none;' src='data:image/".$attachment_type.";base64,".$_SESSION['tmp']['messages']['contact_me']['image']."'>\n";
+	}
 
 //new message layer
 	if (permission_exists('message_add')) {
@@ -120,7 +161,7 @@
 		echo "							<td class='vncell'>".$text['label-message_from']."</td>\n";
 		echo "							<td class='vtable'>\n";
 		if (is_array($destinations) && sizeof($destinations) != 0) {
-			echo "							<select class='formfld' name='message_from' id='message_new_from' onchange=\" $('#message_new_to').focus();\">\n";
+			echo "							<select class='formfld' name='message_from' id='message_new_from' onchange=\"$('#message_new_to').trigger('focus');\">\n";
 			foreach ($destinations as $destination) {
 				echo "							<option value='".$destination."'>".format_phone($destination)."</option>\n";
 			}
@@ -183,13 +224,13 @@
 
 	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 	echo "	<tr>\n";
-	echo "		<th width='25%'>".$text['label-contacts']."</th>\n";
+	echo "		<th width='30%'>".$text['label-contacts']."</th>\n";
 	echo "		<th style='white-space: nowrap;'><nobr>".$text['label-messages']."<nobr></th>\n";
-	echo "		<th width='75%' style='text-align: right; font-weight: normal;' id='contact_current_name'></th>\n";
+	echo "		<th width='70%' style='text-align: right; font-weight: normal;' id='contact_current_name'></th>\n";
 	echo "	</tr>\n";
 	echo "	<tr>\n";
 	echo "		<td id='contacts' valign='top'><center>&middot;&middot;&middot;</center></td>\n";
-	echo "		<td id='thread' colspan='2' valign='top' style='border-left: 1px solid #c5d1e5; padding: 15px;'><center>&middot;&middot;&middot;</center></td>\n";
+	echo "		<td id='thread' colspan='2' valign='top' style='border-left: 1px solid #c5d1e5; padding: 15px 0 15px 15px;'><center>&middot;&middot;&middot;</center></td>\n";
 	echo "	</tr>\n";
 	echo "</table>\n";
 	echo "<input type='hidden' id='contact_current_number' value=''>\n";
@@ -211,19 +252,21 @@
 	echo "		});\n";
 	echo "	}\n";
 
-	echo "	function load_thread(number) {\n";
+	echo "	function load_thread(number, contact_uuid) {\n";
 	echo "		clearTimeout(timer_thread);\n";
-	echo "		$('#thread').load('messages_thread.php?number=' + encodeURIComponent(number), function(){\n";
-	echo "			$('#thread_messages').scrollTop(Number.MAX_SAFE_INTEGER);\n"; //chrome
-	echo "			$('span#thread_bottom')[0].scrollIntoView(true);\n"; //others
-					//note: the order of the above two lines matters!
+	echo "		$('#thread').load('messages_thread.php?number=' + encodeURIComponent(number) + '&contact_uuid=' + encodeURIComponent(contact_uuid), function(){\n";
+	echo "			$('div#thread_messages').animate({ 'max-height': $(window).height() - 470 }, 200, function() {\n";
+	echo "				$('#thread_messages').scrollTop(Number.MAX_SAFE_INTEGER);\n"; //chrome
+	echo "				$('span#thread_bottom')[0].scrollIntoView(true);\n"; //others
+						//note: the order of the above two lines matters!
 	if (!http_user_agent('mobile')) {
-		echo "		if ($('#message_new_layer').is(':hidden')) {\n";
-		echo "			$('#message_text').focus();\n";
-		echo "		}\n";
+		echo "			if ($('#message_new_layer').is(':hidden')) {\n";
+		echo "				$('#message_text').trigger('focus');\n";
+		echo "			}\n";
 	}
-	echo "			refresh_contacts();\n";
-	echo "			timer_thread = setTimeout(refresh_thread_start, thread_refresh, number);\n";
+	echo "				refresh_contacts();\n";
+	echo "				timer_thread = setTimeout(refresh_thread_start, thread_refresh, number, contact_uuid);\n";
+	echo "			});\n";
 	echo "		});\n";
 	echo "	}\n";
 
@@ -235,19 +278,21 @@
 	echo "		refresh_contacts();\n";
 	echo "	}\n";
 
-	echo "	function refresh_thread(number, onsent) {\n";
-	echo "		$('#thread_messages').load('messages_thread.php?refresh=true&number=' + encodeURIComponent(number), function(){\n";
-	echo "			$('#thread_messages').scrollTop(Number.MAX_SAFE_INTEGER);\n"; //chrome
-	echo "			$('span#thread_bottom')[0].scrollIntoView(true);\n"; //others
-					//note: the order of the above two lines matters!
+	echo "	function refresh_thread(number, contact_uuid, onsent) {\n";
+	echo "		$('#thread_messages').load('messages_thread.php?refresh=true&number=' + encodeURIComponent(number) + '&contact_uuid=' + encodeURIComponent(contact_uuid), function(){\n";
+	echo "			$('div#thread_messages').animate({ 'max-height': $(window).height() - 470 }, 200, function() {\n";
+	echo "				$('#thread_messages').scrollTop(Number.MAX_SAFE_INTEGER);\n"; //chrome
+	echo "				$('span#thread_bottom')[0].scrollIntoView(true);\n"; //others
+						//note: the order of the above two lines matters!
 	if (!http_user_agent('mobile')) {
-		echo "		if ($('#message_new_layer').is(':hidden')) {\n";
-		echo "			$('#message_text').focus();\n";
-		echo "		}\n";
+		echo "				if ($('#message_new_layer').is(':hidden')) {\n";
+		echo "			$('#message_text').trigger('focus');\n";
+		echo "			}\n";
 	}
-	echo "			if (onsent != 'true') {\n";
-	echo "				timer_thread = setTimeout(refresh_thread, thread_refresh, number);\n";
-	echo "			}\n";
+	echo "				if (onsent != 'true') {\n";
+	echo "					timer_thread = setTimeout(refresh_thread, thread_refresh, number, contact_uuid);\n";
+	echo "				}\n";
+	echo "			});\n";
 	echo "		});\n";
 	echo "	}\n";
 
@@ -264,15 +309,15 @@
 	echo "		}\n";
 	echo "	}\n";
 
-	echo "	function refresh_thread_stop(number) {\n";
+	echo "	function refresh_thread_stop(number, contact_uuid) {\n";
 	echo "		clearTimeout(timer_thread);\n";
-	echo "		document.getElementById('thread_refresh_state').innerHTML = \"<img src='resources/images/refresh_paused.png' style='width: 16px; height: 16px; border: none; margin-top: 1px; cursor: pointer;' onclick='refresh_thread_start(\" + number + \");' alt='".$text['label-refresh_enable']."' title='".$text['label-refresh_enable']."'>\";\n";
+	?>			document.getElementById('thread_refresh_state').innerHTML = "<img src='resources/images/refresh_paused.png' style='width: 16px; height: 16px; border: none; margin-top: 3px; cursor: pointer;' onclick=\"refresh_thread_start('" + number + "', '" + contact_uuid + "');\" alt=\"<?php echo $text['label-refresh_enable']; ?>\" title=\"<?php echo $text['label-refresh_enable']; ?>\">";<?php
 	echo "	}\n";
 
-	echo "	function refresh_thread_start(number) {\n";
+	echo "	function refresh_thread_start(number, contact_uuid) {\n";
 	echo "		if (document.getElementById('thread_refresh_state')) {\n";
-	echo "			document.getElementById('thread_refresh_state').innerHTML = \"<img src='resources/images/refresh_active.gif' style='width: 16px; height: 16px; border: none; margin-top: 3px; cursor: pointer;' onclick='refresh_thread_stop(\" + number + \");' alt='".$text['label-refresh_pause']."' title='".$text['label-refresh_pause']."'>\";\n";
-	echo "			refresh_thread(number);\n";
+	?>				document.getElementById('thread_refresh_state').innerHTML = "<img src='resources/images/refresh_active.gif' style='width: 16px; height: 16px; border: none; margin-top: 3px; cursor: pointer;' onclick=\"refresh_thread_stop('" + number + "', '" + contact_uuid + "');\" alt=\"<?php echo $text['label-refresh_pause']; ?>\" title=\"<?php echo $text['label-refresh_pause']; ?>\">";<?php
+	echo "			refresh_thread(number, contact_uuid);\n";
 	echo "		}\n";
 	echo "	}\n";
 

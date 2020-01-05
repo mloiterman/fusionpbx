@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2014
+	Portions created by the Initial Developer are Copyright (C) 2008-2019
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -44,8 +44,8 @@
 
 //get the http value and set as a php variable
 	if (!$included) {
-		$menu_uuid = check_str($_REQUEST["menu_uuid"]);
-		$menu_language = check_str($_REQUEST["menu_language"]);
+		$menu_uuid = $_REQUEST["menu_uuid"];
+		$menu_language = $_REQUEST["menu_language"];
 	}
 
 //menu restore default
@@ -54,20 +54,21 @@
 	$menu->db = $db;
 	$menu->menu_uuid = $menu_uuid;
 	$menu->menu_language = $menu_language;
-	$menu->delete();
+	$menu->delete_unprotected();
 	$menu->restore();
+	unset($menu);
 
-//unset the menu session variable
-	$_SESSION["menu"] = "";
-
-//unset the default template
-	$_SESSION["template_content"] = '';
+//get the menu array and save it to the session
+	$menu = new menu;
+	$menu->menu_uuid = $_SESSION['domain']['menu']['uuid'];
+	$_SESSION['menu']['array'] = $menu->menu_array();
+	unset($menu);
 
 //redirect
 	if (!$included) {
 		//show a message to the user
 		message::add($text['message-restore']);
-		header("Location: ".PROJECT_PATH."/core/menu/menu_edit.php?id=".$menu_uuid);
+		header("Location: ".PROJECT_PATH."/core/menu/menu_edit.php?id=".urlencode($menu_uuid));
 		return;
 	}
 

@@ -19,9 +19,9 @@
 		$apps[$x]['description']['fr-fr'] = "Les passerelles donnent access autres réseaux vocaux. Ceux-ci peuvent être des opérateurs ou d'autres systèmes reqieérant un enregistrement SIP";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Gateways voorzien in toegang tot andere telefonie netwerken. Dit kunne de VOIP-providers zijn, of andere systemen die een SIP registratie behoeven.";
 		$apps[$x]['description']['pl-pl'] = "";
-		$apps[$x]['description']['pt-br'] = "";
+		$apps[$x]['description']['pt-br'] = "Troncos garantem acesso à outras redes de voz. Podem ser provedores VoIP ou outros sistemas que requerem registro SIP.";
 		$apps[$x]['description']['pt-pt'] = "As Gateways garatem o acesso a redes de voz fornecidas por outros operdadores. Estes podem ser os operadores de voz ou outros sistemas que exigem registo SIP.";
 		$apps[$x]['description']['ro-ro'] = "";
 		$apps[$x]['description']['ru-ru'] = "";
@@ -66,8 +66,11 @@
 		$y++;
 		$apps[$x]['permissions'][$y]['name'] = "gateway_all";
 		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
+		$y++;
+		$apps[$x]['permissions'][$y]['name'] = "gateway_channels";
+		$apps[$x]['permissions'][$y]['groups'][] = "superadmin";
 
-//default settings
+	//default settings
 		$y = 0;
 		$apps[$x]['default_settings'][$y]['default_setting_uuid'] = "df031ab4-087d-4e0e-92ac-e96f5d0aa55d";
 		$apps[$x]['default_settings'][$y]['default_setting_category'] = "limit";
@@ -77,7 +80,10 @@
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "false";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
 
-//schema details
+	//cache details
+		$apps[$x]['cache']['key'] = "configuration.sofia.conf.\${hostname}";
+
+	//schema details
 		$y=0;
 		$apps[$x]['db'][$y]['table']['name'] = "v_gateways";
 		$apps[$x]['db'][$y]['table']['parent'] = "";

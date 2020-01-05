@@ -13,13 +13,14 @@
 		$apps[$x]['description']['de-at'] = "Warteschlangen um eingehende Anrufe zu verwalten und diese an verfügbare Agenten weiterzuleiten.";
 		$apps[$x]['description']['de-ch'] = "";
 		$apps[$x]['description']['de-de'] = "Warteschlangen um eingehende Anrufe zu verwalten und diese an verfügbare Agenten weiterzuleiten.";
+		$apps[$x]['description']['el-gr'] = "Ουρές για διαχείριση εισερχόμενων κλήσεων και δρομολόγησης των κλήσεων σε διαθέσιμους τηλεφωνητές/τηλεφωνήτριες.";
 		$apps[$x]['description']['es-cl'] = "Colas pra administar las llamadas entrantes y enviarlas a los agentes disponibles";
 		$apps[$x]['description']['es-mx'] = "";
 		$apps[$x]['description']['fr-ca'] = "Queues pour envoyer les appels entrants vers les agents disponibles.";
 		$apps[$x]['description']['fr-fr'] = "Files d'attente d'appels entrants distribu%uFFFDs aux agents disponibles.";
 		$apps[$x]['description']['he-il'] = "";
 		$apps[$x]['description']['it-it'] = "";
-		$apps[$x]['description']['nl-nl'] = "";
+		$apps[$x]['description']['nl-nl'] = "Wachtrijen voor beheer van inkomede gesprekken en routering naar beschikbare agenten.";
 		$apps[$x]['description']['pl-pl'] = "";
 		$apps[$x]['description']['pt-br'] = "As filas servem para gerenciar as chamadas que entram e encaminhar as mesmas para os agentes disponíveis.";
 		$apps[$x]['description']['pt-pt'] = "As filas servem para gerenciamento de chamadas de entrada e encaminhamento das mesmas para os agentes dispon%uFFFDveis.";
@@ -140,6 +141,9 @@
 		$apps[$x]['default_settings'][$y]['default_setting_value'] = "1";
 		$apps[$x]['default_settings'][$y]['default_setting_enabled'] = "true";
 		$apps[$x]['default_settings'][$y]['default_setting_description'] = "";
+
+	//cache details
+		$apps[$x]['cache']['key'] = "dialplan.\${domain_name}";
 
 	//schema details
 		$y=0;

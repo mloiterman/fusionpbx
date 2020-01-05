@@ -92,7 +92,7 @@
 			if (context_name == 'public' and context_type == 'single') then
 				sql = "select d.domain_name, dialplan_xml from v_dialplans as p, v_domains as d ";
 				sql = sql .. "where ( ";
-				sql = sql .. "	p.dialplan_uuid in (select dialplan_uuid from v_destinations where destination_number = :destination_number) ";
+				sql = sql .. "	p.dialplan_uuid in (select dialplan_uuid from v_destinations where (destination_number = :destination_number or destination_prefix || destination_number = :destination_number)) ";
 				sql = sql .. "	or (p.dialplan_context like '%public%' and p.domain_uuid is null) ";
 				sql = sql .. ") ";
 				sql = sql .. "and p.domain_uuid = d.domain_uuid ";
@@ -115,7 +115,7 @@
 					table.insert(xml, [[		<extension name="not-found" continue="false" uuid="9913df49-0757-414b-8cf9-bcae2fd81ae7">]]);
 					table.insert(xml, [[			<condition field="" expression="">]]);
 					table.insert(xml, [[				<action application="set" data="call_direction=inbound" inline="true"/>]]);
-					table.insert(xml, [[				<action application="log" data="[inbound routes] 404 not found ${sip_network_ip}" inline="true"/>]]);
+					table.insert(xml, [[				<action application="log" data="WARNING [inbound routes] 404 not found ${sip_network_ip}" inline="true"/>]]);
 					table.insert(xml, [[			</condition>]]);
 					table.insert(xml, [[		</extension>]]);
 				end
@@ -170,7 +170,7 @@
 
 --send the xml to the console
 	if (debug["xml_string"]) then
-		local file = assert(io.open(temp_dir .. "/" .. key .. ".xml", "w"));
+		local file = assert(io.open(temp_dir .. "/" .. dialplan_cache_key .. ".xml", "w"));
 		file:write(XML_STRING);
 		file:close();
 	end
